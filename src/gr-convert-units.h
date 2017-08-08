@@ -48,5 +48,4 @@ void                convert_volume              (double *amount, GrUnit *unit, i
 void                convert_weight              (double *amount, GrUnit *unit, int user_weight_unit);
 void                human_readable              (double *amount, GrUnit *unit);
 
-
 G_END_DECLS
