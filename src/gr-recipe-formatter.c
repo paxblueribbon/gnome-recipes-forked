@@ -33,35 +33,8 @@
 #include "gr-chef.h"
 #include "gr-recipe-store.h"
 #include "gr-utils.h"
-
-typedef enum {
-        GR_TEMPERATURE_UNIT_CELSIUS    = 0,
-        GR_TEMPERATURE_UNIT_FAHRENHEIT = 1,
-        GR_TEMPERATURE_UNIT_LOCALE     = 2
-} GrTemperatureUnit;
-
-static int
-get_temperature_unit (void)
-{
-        int unit;
-        GSettings *settings = gr_settings_get ();
-
-        unit = g_settings_get_enum (settings, "temperature-unit");
-
-        if (unit == GR_TEMPERATURE_UNIT_LOCALE) {
-#ifdef LC_MEASUREMENT
-                const char *fmt;
-
-                fmt = nl_langinfo (_NL_MEASUREMENT_MEASUREMENT);
-                if (fmt && *fmt == 2)
-                        unit = GR_TEMPERATURE_UNIT_FAHRENHEIT;
-                else
-#endif
-                        unit = GR_TEMPERATURE_UNIT_CELSIUS;
-        }
-
-        return unit;
-}
+#include "gr-convert-units.h"
+#include "gr-unit.h"
 
 char *
 gr_recipe_format (GrRecipe *recipe)
@@ -205,17 +178,7 @@ gr_recipe_parse_instructions (const char *instructions,
                                 }
                                 num = atoi (p + strlen ("[temperature:"));
 
-                                if (unit == user_unit) {
-                                        // no conversion needed
-                                }
-                                else if (unit == GR_TEMPERATURE_UNIT_CELSIUS &&
-                                         user_unit == GR_TEMPERATURE_UNIT_FAHRENHEIT) {
-                                        num = (num * 1.8) + 32;
-                                }
-                                else if (unit == GR_TEMPERATURE_UNIT_FAHRENHEIT &&
-                                         user_unit == GR_TEMPERATURE_UNIT_CELSIUS) {
-                                        num = (num - 32) / 1.8;
-                                }
+                                convert_temp(&num, &unit, user_unit);
 
                                 tmp = g_strdup_printf ("%s%d%s%s", prefix, num, unit_str[user_unit], q + 1);
                                 g_free (step);
