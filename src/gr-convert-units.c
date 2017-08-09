@@ -254,6 +254,7 @@ human_readable (double *amount, GrUnit *unit)
         
         gboolean unit_changed = TRUE;
 
+    while(unit_changed) {
         switch (unit1) {
                 case GR_UNIT_GRAM: 
                         if (amount1 >= 1000) {
@@ -343,16 +344,12 @@ human_readable (double *amount, GrUnit *unit)
 
                 default:
                 ;
-        }
+    }
 
-        if (*unit == unit1) {
+                if (*unit == unit1) {
                 unit_changed = FALSE; 
         }
-
-        if(unit_changed) {
-                human_readable(&amount1, &unit1);
-        }
-
-        *amount = amount1;
-        *unit = unit1;
+                *amount = amount1;
+                *unit = unit1;
+    }
 }
