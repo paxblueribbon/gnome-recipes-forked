@@ -34,6 +34,7 @@
 #include "gr-shopping-list-printer.h"
 #include "gr-shopping-list-formatter.h"
 #include "gr-mail.h"
+#include "gr-convert-units.h"
 
 
 struct _GrShoppingPage
@@ -216,11 +217,33 @@ ingredient_format_unit (Ingredient *ing)
                 g_autofree char *num = NULL;
                 if (s->len > 0)
                         g_string_append (s, ", ");
-                num = gr_number_format (u->amount);
+                double amount = u->amount;
+                GrUnit u1 = u->unit;
+                g_message("shopping amount is %f", amount);
+                const char *unit_name = gr_unit_get_display_name(u1);
+                g_message("unit is %s", unit_name);
+                
+                GrDimension dimension = gr_unit_get_dimension(u1);
+                if (dimension) {
+                
+                if (dimension == GR_DIMENSION_VOLUME) {
+                        GrPreferredUnit user_volume_unit = get_volume_unit();
+                        convert_volume(&amount, &u1, user_volume_unit); 
+                        }
+
+                if (dimension == GR_DIMENSION_MASS) {
+                        GrPreferredUnit user_weight_unit = get_weight_unit();
+                        convert_weight(&amount, &u1, user_weight_unit);
+                        }
+               }
+
+                human_readable(&amount, &u1);
+                num = gr_number_format (amount);
                 g_string_append (s, num);
+                g_message("shopping num is %s", num);
                 g_string_append (s, " ");
                 if (u->unit)
-                        g_string_append (s, gr_unit_get_abbreviation (u->unit));
+                        g_string_append (s, gr_unit_get_abbreviation (u1));
         }
 
         return g_strdup (s->str);
