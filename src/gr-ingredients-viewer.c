@@ -326,6 +326,8 @@ gr_ingredients_viewer_set_ingredients (GrIngredientsViewer *viewer,
                 GrUnit unit2 = GR_UNIT_UNKNOWN;
                 GtkWidget *row;
                 GrDimension dimension;
+                GrPreferredUnit user_volume_unit = get_volume_unit();
+                GrPreferredUnit user_weight_unit = get_weight_unit();
 
                 double scale = viewer->scale;
                 
@@ -337,17 +339,19 @@ gr_ingredients_viewer_set_ingredients (GrIngredientsViewer *viewer,
 
                if (dimension) {
                 if (dimension == GR_DIMENSION_VOLUME) {
-                        GrPreferredUnit user_volume_unit = get_volume_unit();
                         convert_volume(&amount, &unit, user_volume_unit); 
                         }
 
                 if (dimension == GR_DIMENSION_MASS) {
-                        GrPreferredUnit user_weight_unit = get_weight_unit();
                         convert_weight(&amount, &unit, user_weight_unit);
                         }
                }
-
-                multiple_units(&amount, &unit, &amount2, &unit2);  
+                if ((dimension == GR_DIMENSION_VOLUME && user_volume_unit == GR_PREFERRED_UNIT_IMPERIAL) || (dimension == GR_DIMENSION_MASS && user_weight_unit == GR_PREFERRED_UNIT_IMPERIAL)) {
+                        multiple_units(&amount, &unit, &amount2, &unit2);  
+                }
+                else {
+                        human_readable(&amount, &unit);
+                }
 
                 char *a_final = gr_number_format(amount);
                 const char *u_final = gr_unit_get_name(unit);
