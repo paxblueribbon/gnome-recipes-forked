@@ -47,5 +47,7 @@ void                convert_temp                (int *num, int *unit, int user_u
 void                convert_volume              (double *amount, GrUnit *unit, int user_volume_unit); 
 void                convert_weight              (double *amount, GrUnit *unit, int user_weight_unit);
 void                human_readable              (double *amount, GrUnit *unit);
+void                multiple_units              (double *amount1, GrUnit *unit1, double *amount2, GrUnit *unit2);
+char *              format_for_display          (char *a1, const char *u1, char *a2, const char *u2);
 
 G_END_DECLS
