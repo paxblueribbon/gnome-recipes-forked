@@ -389,15 +389,25 @@ multiple_units (double *amount1, GrUnit *unit1, double *amount2, GrUnit *unit2)
                 
                 else
                 {
+<<<<<<< HEAD
                         n2 = 0;
                         u2 = GR_UNIT_UNKNOWN;
+=======
+                                n2 = 0;
+                                u2 = GR_UNIT_UNKNOWN;
+>>>>>>> 7016b4a52cac3e6adc228ce2478ec896491fbaa6
                 }
         }
 
         else
         {
+<<<<<<< HEAD
                 n2 = 0;
                 u2 = GR_UNIT_UNKNOWN;
+=======
+                                n2 = 0;
+                                u2 = GR_UNIT_UNKNOWN;
+>>>>>>> 7016b4a52cac3e6adc228ce2478ec896491fbaa6
         }
 
         *amount1 = n1;
@@ -407,8 +417,12 @@ multiple_units (double *amount1, GrUnit *unit1, double *amount2, GrUnit *unit2)
 }
 
 char *            
+<<<<<<< HEAD
 format_for_display  (char *a1, const char *u1, char *a2, const char *u2) 
 {
+=======
+format_for_display  (char *a1, const char *u1, char *a2, const char *u2) {
+>>>>>>> 7016b4a52cac3e6adc228ce2478ec896491fbaa6
                 g_autoptr(GString) s = NULL;
                 s = g_string_new ("");
 
