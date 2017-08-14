@@ -87,6 +87,7 @@ git clone --recursive git://git.gnome.org/recipes
 ```
 cd recipes
 meson -Dautoar=no -Dcanberra=no build
+git submodule init
 ninja -C build
 ```
 To build a released version of recipes on OS X, just
