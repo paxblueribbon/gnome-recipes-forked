@@ -209,6 +209,9 @@ ingredient_format_unit (Ingredient *ing)
 {
         g_autoptr(GString) s = NULL;
         int i;
+        static char *for_display;
+        GrPreferredUnit user_volume_unit = get_volume_unit();
+        GrPreferredUnit user_weight_unit = get_weight_unit();
 
         s = g_string_new ("");
 
@@ -217,36 +220,38 @@ ingredient_format_unit (Ingredient *ing)
                 g_autofree char *num = NULL;
                 if (s->len > 0)
                         g_string_append (s, ", ");
-                double amount = u->amount;
+                double a1 = u->amount;
                 GrUnit u1 = u->unit;
-                g_message("shopping amount is %f", amount);
-                const char *unit_name = gr_unit_get_display_name(u1);
-                g_message("unit is %s", unit_name);
-                
+                double a2 = 0;
+                GrUnit u2 = GR_UNIT_UNKNOWN;
+               
                 GrDimension dimension = gr_unit_get_dimension(u1);
                 if (dimension) {
                 
                 if (dimension == GR_DIMENSION_VOLUME) {
-                        GrPreferredUnit user_volume_unit = get_volume_unit();
-                        convert_volume(&amount, &u1, user_volume_unit); 
+                        convert_volume(&a1, &u1, user_volume_unit); 
                         }
 
                 if (dimension == GR_DIMENSION_MASS) {
-                        GrPreferredUnit user_weight_unit = get_weight_unit();
-                        convert_weight(&amount, &u1, user_weight_unit);
+                        convert_weight(&a1, &u1, user_weight_unit);
                         }
                }
-
-                human_readable(&amount, &u1);
-                num = gr_number_format (amount);
-                g_string_append (s, num);
-                g_message("shopping num is %s", num);
-                g_string_append (s, " ");
-                if (u->unit)
-                        g_string_append (s, gr_unit_get_abbreviation (u1));
+                
+                if ((dimension == GR_DIMENSION_VOLUME && user_volume_unit == GR_PREFERRED_UNIT_IMPERIAL) || (dimension == GR_DIMENSION_MASS && user_weight_unit == GR_PREFERRED_UNIT_IMPERIAL)) {
+                        multiple_units(&a1, &u1, &a2, &u2);  
+                }
+                else {
+                        human_readable(&a1, &u1);
+                }
+                char *a_final = gr_number_format(a1);
+                const char *u_final = gr_unit_get_name(u1);
+                char *a2_final = gr_number_format(a2);
+                const char *u2_final = gr_unit_get_name(u2);
+ 
+                for_display = format_for_display(a_final, u_final, a2_final, u2_final);
         }
 
-        return g_strdup (s->str);
+        return for_display;
 }
 
 static void

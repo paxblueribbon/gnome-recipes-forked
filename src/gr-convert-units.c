@@ -353,3 +353,83 @@ human_readable (double *amount, GrUnit *unit)
                 *unit = unit1;
     }
 }
+
+void
+multiple_units (double *amount1, GrUnit *unit1, double *amount2, GrUnit *unit2)
+{
+
+        double n1 = *amount1;
+        double n2 = *amount2;
+        GrUnit u1 = *unit1;
+        GrUnit u2 = *unit2;
+        double fractional, integer;
+
+        human_readable(&n1, &u1);
+
+        fractional = modf(n1, &integer);
+
+        if (u1 != GR_UNIT_UNKNOWN) {
+                if (fractional > 0)
+                {
+                        n2 = fractional;
+                        u2 = u1;
+                        human_readable(&n2, &u2);
+
+                        if (u1 != u2)
+                        {
+                                n1 = integer;
+                        }
+                        
+                        else 
+                        {
+                                n2 = 0;
+                                u2 = GR_UNIT_UNKNOWN;
+                        }
+                }
+                
+                else
+                {
+                                n2 = 0;
+                                u2 = GR_UNIT_UNKNOWN;
+                }
+        }
+
+        else
+        {
+                                n2 = 0;
+                                u2 = GR_UNIT_UNKNOWN;
+        }
+
+        *amount1 = n1;
+        *unit1 = u1;
+        *amount2 = n2;
+        *unit2 = u2;
+}
+
+char *            
+format_for_display  (char *a1, const char *u1, char *a2, const char *u2) {
+                g_autoptr(GString) s = NULL;
+                s = g_string_new ("");
+
+                if (u1 == NULL) {
+                        g_string_append(s, a1);
+
+                }
+                else if (u2 == NULL) {
+                        g_string_append(s, a1);
+                        g_string_append(s, " ");
+                        g_string_append(s, u1);
+                }
+
+                else {
+                        g_string_append(s, a1);
+                        g_string_append(s, " ");
+                        g_string_append(s, u1);
+                        g_string_append(s, ", ");
+                        g_string_append(s, a2);
+                        g_string_append(s, " ");
+                        g_string_append(s, u2);
+                }
+    
+    return g_strdup (s->str);
+}

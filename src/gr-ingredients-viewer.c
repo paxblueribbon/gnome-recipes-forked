@@ -321,9 +321,13 @@ gr_ingredients_viewer_set_ingredients (GrIngredientsViewer *viewer,
         for (i = 0; ings && ings[i]; i++) {
 
                 double amount;
+                double amount2 = 0;
                 GrUnit unit;
+                GrUnit unit2 = GR_UNIT_UNKNOWN;
                 GtkWidget *row;
                 GrDimension dimension;
+                GrPreferredUnit user_volume_unit = get_volume_unit();
+                GrPreferredUnit user_weight_unit = get_weight_unit();
 
                 double scale = viewer->scale;
                 
@@ -335,34 +339,29 @@ gr_ingredients_viewer_set_ingredients (GrIngredientsViewer *viewer,
 
                if (dimension) {
                 if (dimension == GR_DIMENSION_VOLUME) {
-                        GrPreferredUnit user_volume_unit = get_volume_unit();
                         convert_volume(&amount, &unit, user_volume_unit); 
                         }
 
                 if (dimension == GR_DIMENSION_MASS) {
-                        GrPreferredUnit user_weight_unit = get_weight_unit();
                         convert_weight(&amount, &unit, user_weight_unit);
                         }
                }
-
-                human_readable(&amount, &unit);
-                
-                char *a_final = gr_number_format(amount);
-                const char *u_final = gr_unit_get_name(unit);
- 
-                char for_display[128];
-                if (u_final == NULL) {
-                        snprintf(for_display, sizeof for_display, "%s", a_final);
-
+                if ((dimension == GR_DIMENSION_VOLUME && user_volume_unit == GR_PREFERRED_UNIT_IMPERIAL) || (dimension == GR_DIMENSION_MASS && user_weight_unit == GR_PREFERRED_UNIT_IMPERIAL)) {
+                        multiple_units(&amount, &unit, &amount2, &unit2);  
                 }
                 else {
-                        snprintf(for_display, sizeof for_display, "%s %s", a_final, u_final);
+                        human_readable(&amount, &unit);
                 }
 
-                u_final = for_display;
-
+                char *a_final = gr_number_format(amount);
+                const char *u_final = gr_unit_get_name(unit);
+                char *a2_final = gr_number_format(amount2);
+                const char *u2_final = gr_unit_get_name(unit2);
+ 
+                char *for_display = format_for_display(a_final, u_final, a2_final, u2_final);
+                
                 row = g_object_new (GR_TYPE_INGREDIENTS_VIEWER_ROW,
-                                    "unit", u_final,
+                                    "unit", for_display,
                                     "ingredient", ings[i],
                                     "size-group", viewer->group,
                                     "editable", viewer->editable,
