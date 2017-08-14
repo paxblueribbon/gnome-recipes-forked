@@ -326,8 +326,8 @@ gr_ingredients_viewer_set_ingredients (GrIngredientsViewer *viewer,
                 GrUnit unit2 = GR_UNIT_UNKNOWN;
                 GtkWidget *row;
                 GrDimension dimension;
-                GrPreferredUnit user_volume_unit = get_volume_unit();
-                GrPreferredUnit user_weight_unit = get_weight_unit();
+                GrPreferredUnit user_volume_unit = gr_convert_get_volume_unit();
+                GrPreferredUnit user_weight_unit = gr_convert_get_weight_unit();
 
                 double scale = viewer->scale;
                 
@@ -339,18 +339,18 @@ gr_ingredients_viewer_set_ingredients (GrIngredientsViewer *viewer,
 
                if (dimension) {
                 if (dimension == GR_DIMENSION_VOLUME) {
-                        convert_volume(&amount, &unit, user_volume_unit); 
+                        gr_convert_volume(&amount, &unit, user_volume_unit); 
                         }
 
                 if (dimension == GR_DIMENSION_MASS) {
-                        convert_weight(&amount, &unit, user_weight_unit);
+                        gr_convert_weight(&amount, &unit, user_weight_unit);
                         }
                }
                 if ((dimension == GR_DIMENSION_VOLUME && user_volume_unit == GR_PREFERRED_UNIT_IMPERIAL) || (dimension == GR_DIMENSION_MASS && user_weight_unit == GR_PREFERRED_UNIT_IMPERIAL)) {
-                        multiple_units(&amount, &unit, &amount2, &unit2);  
+                        gr_convert_multiple_units(&amount, &unit, &amount2, &unit2);  
                 }
                 else {
-                        human_readable(&amount, &unit);
+                        gr_convert_human_readable(&amount, &unit);
                 }
 
                 char *a_final = gr_number_format(amount);
@@ -358,7 +358,7 @@ gr_ingredients_viewer_set_ingredients (GrIngredientsViewer *viewer,
                 char *a2_final = gr_number_format(amount2);
                 const char *u2_final = gr_unit_get_name(unit2);
  
-                char *for_display = format_for_display(a_final, u_final, a2_final, u2_final);
+                char *for_display = gr_convert_format_for_display(a_final, u_final, a2_final, u2_final);
                 
                 row = g_object_new (GR_TYPE_INGREDIENTS_VIEWER_ROW,
                                     "unit", for_display,

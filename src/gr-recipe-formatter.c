@@ -139,7 +139,7 @@ gr_recipe_parse_instructions (const char *instructions,
         GPtrArray *step_array;
         g_auto(GStrv) steps = NULL;
         int i;
-        int user_unit = get_temperature_unit ();
+        int user_unit = gr_convert_get_temperature_unit ();
 
         step_array = g_ptr_array_new_with_free_func (recipe_step_free);
 
@@ -178,7 +178,7 @@ gr_recipe_parse_instructions (const char *instructions,
                                 }
                                 num = atoi (p + strlen ("[temperature:"));
 
-                                convert_temp(&num, &unit, user_unit);
+                                gr_convert_temp(&num, &unit, user_unit);
                                 
                                 tmp = g_strdup_printf ("%s%d%s%s", prefix, num, unit_str[user_unit], q + 1);
                                 g_free (step);

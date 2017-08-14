@@ -33,7 +33,7 @@
 #include "gr-utils.h"
 
 GrTemperatureUnit
-get_temperature_unit (void)
+gr_convert_get_temperature_unit (void)
 {
         int unit;
         GSettings *settings = gr_settings_get ();
@@ -56,7 +56,7 @@ get_temperature_unit (void)
 }
 
 GrPreferredUnit
-get_volume_unit (void)
+gr_convert_get_volume_unit (void)
 {
         int unit;
         GSettings *settings = gr_settings_get ();
@@ -79,7 +79,7 @@ get_volume_unit (void)
 }
 
 GrPreferredUnit
-get_weight_unit (void)
+gr_convert_get_weight_unit (void)
 {
         int unit;
         GSettings *settings = gr_settings_get ();
@@ -102,7 +102,7 @@ get_weight_unit (void)
 
 
 void
-convert_temp (int *num, int *unit, int user_unit)
+gr_convert_temp (int *num, int *unit, int user_unit)
 {
     int num1 = *num;
     int unit1 = *unit;
@@ -124,7 +124,7 @@ convert_temp (int *num, int *unit, int user_unit)
 }
 
 void 
-convert_volume (double *amount, GrUnit *unit, int user_volume_unit)
+gr_convert_volume (double *amount, GrUnit *unit, int user_volume_unit)
 {
         double amount1 = *amount;
         GrUnit unit1 = *unit;        
@@ -199,7 +199,7 @@ convert_volume (double *amount, GrUnit *unit, int user_volume_unit)
 }
 
 void 
-convert_weight (double *amount, GrUnit *unit, int user_weight_unit)
+gr_convert_weight (double *amount, GrUnit *unit, int user_weight_unit)
 {
         double amount1 = *amount;        
         GrUnit unit1 = *unit;
@@ -247,7 +247,7 @@ convert_weight (double *amount, GrUnit *unit, int user_weight_unit)
 }
 
 void 
-human_readable (double *amount, GrUnit *unit)
+gr_convert_human_readable (double *amount, GrUnit *unit)
 {
         double amount1 = *amount;        
         GrUnit unit1 = *unit;
@@ -355,7 +355,7 @@ human_readable (double *amount, GrUnit *unit)
 }
 
 void
-multiple_units (double *amount1, GrUnit *unit1, double *amount2, GrUnit *unit2)
+gr_convert_multiple_units (double *amount1, GrUnit *unit1, double *amount2, GrUnit *unit2)
 {
 
         double n1 = *amount1;
@@ -364,7 +364,7 @@ multiple_units (double *amount1, GrUnit *unit1, double *amount2, GrUnit *unit2)
         GrUnit u2 = *unit2;
         double fractional, integer;
 
-        human_readable(&n1, &u1);
+        gr_convert_human_readable(&n1, &u1);
 
         fractional = modf(n1, &integer);
 
@@ -373,7 +373,7 @@ multiple_units (double *amount1, GrUnit *unit1, double *amount2, GrUnit *unit2)
                 {
                         n2 = fractional;
                         u2 = u1;
-                        human_readable(&n2, &u2);
+                        gr_convert_human_readable(&n2, &u2);
 
                         if (u1 != u2)
                         {
@@ -389,25 +389,15 @@ multiple_units (double *amount1, GrUnit *unit1, double *amount2, GrUnit *unit2)
                 
                 else
                 {
-<<<<<<< HEAD
                         n2 = 0;
                         u2 = GR_UNIT_UNKNOWN;
-=======
-                                n2 = 0;
-                                u2 = GR_UNIT_UNKNOWN;
->>>>>>> 7016b4a52cac3e6adc228ce2478ec896491fbaa6
                 }
         }
 
         else
         {
-<<<<<<< HEAD
                 n2 = 0;
                 u2 = GR_UNIT_UNKNOWN;
-=======
-                                n2 = 0;
-                                u2 = GR_UNIT_UNKNOWN;
->>>>>>> 7016b4a52cac3e6adc228ce2478ec896491fbaa6
         }
 
         *amount1 = n1;
@@ -417,12 +407,8 @@ multiple_units (double *amount1, GrUnit *unit1, double *amount2, GrUnit *unit2)
 }
 
 char *            
-<<<<<<< HEAD
-format_for_display  (char *a1, const char *u1, char *a2, const char *u2) 
+gr_convert_format_for_display  (char *a1, const char *u1, char *a2, const char *u2) 
 {
-=======
-format_for_display  (char *a1, const char *u1, char *a2, const char *u2) {
->>>>>>> 7016b4a52cac3e6adc228ce2478ec896491fbaa6
                 g_autoptr(GString) s = NULL;
                 s = g_string_new ("");
 

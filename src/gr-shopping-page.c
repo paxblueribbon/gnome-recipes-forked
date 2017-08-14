@@ -210,8 +210,8 @@ ingredient_format_unit (Ingredient *ing)
         g_autoptr(GString) s = NULL;
         int i;
         static char *for_display;
-        GrPreferredUnit user_volume_unit = get_volume_unit();
-        GrPreferredUnit user_weight_unit = get_weight_unit();
+        GrPreferredUnit user_volume_unit = gr_convert_get_volume_unit();
+        GrPreferredUnit user_weight_unit = gr_convert_get_weight_unit();
 
         s = g_string_new ("");
 
@@ -229,26 +229,26 @@ ingredient_format_unit (Ingredient *ing)
                 if (dimension) {
                 
                 if (dimension == GR_DIMENSION_VOLUME) {
-                        convert_volume(&a1, &u1, user_volume_unit); 
+                        gr_convert_volume(&a1, &u1, user_volume_unit); 
                         }
 
                 if (dimension == GR_DIMENSION_MASS) {
-                        convert_weight(&a1, &u1, user_weight_unit);
+                        gr_convert_weight(&a1, &u1, user_weight_unit);
                         }
                }
                 
                 if ((dimension == GR_DIMENSION_VOLUME && user_volume_unit == GR_PREFERRED_UNIT_IMPERIAL) || (dimension == GR_DIMENSION_MASS && user_weight_unit == GR_PREFERRED_UNIT_IMPERIAL)) {
-                        multiple_units(&a1, &u1, &a2, &u2);  
+                        gr_convert_multiple_units(&a1, &u1, &a2, &u2);  
                 }
                 else {
-                        human_readable(&a1, &u1);
+                        gr_convert_human_readable(&a1, &u1);
                 }
                 char *a_final = gr_number_format(a1);
                 const char *u_final = gr_unit_get_name(u1);
                 char *a2_final = gr_number_format(a2);
                 const char *u2_final = gr_unit_get_name(u2);
  
-                for_display = format_for_display(a_final, u_final, a2_final, u2_final);
+                for_display = gr_convert_format_for_display(a_final, u_final, a2_final, u2_final);
         }
 
         return for_display;
