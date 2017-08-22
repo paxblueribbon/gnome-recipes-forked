@@ -48,6 +48,6 @@ void                gr_convert_volume                   (double *amount, GrUnit 
 void                gr_convert_weight                   (double *amount, GrUnit *unit, GrPreferredUnit user_weight_unit);
 void                gr_convert_human_readable           (double *amount, GrUnit *unit);
 void                gr_convert_multiple_units           (double *amount1, GrUnit *unit1, double *amount2, GrUnit *unit2);
-char *              gr_convert_format_for_display       (char *a1, const char *u1, char *a2, const char *u2);
+char *              gr_convert_format_for_display       (char *a1, GrUnit u1, char *a2, GrUnit u2);
 
 G_END_DECLS

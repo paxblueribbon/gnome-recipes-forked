@@ -257,15 +257,7 @@ ingredient_format_unit (Ingredient *ing)
                 gr_convert_human_readable (&a1, &u1);
         }
 
-        a1_final = gr_number_format (a1);
-        u1_final = gr_unit_get_name (u1);
-
-        if (u2 != GR_UNIT_UNKNOWN) {
-                a2_final = gr_number_format (a2);
-                u2_final = gr_unit_get_name (u2);
-        }
-
-        return gr_convert_format_for_display (a1_final, u1_final, a2_final, u2_final);
+        return gr_convert_format_for_display (a1, u1, a2, u2);
 }
 
 
