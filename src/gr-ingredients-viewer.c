@@ -352,13 +352,8 @@ gr_ingredients_viewer_set_ingredients (GrIngredientsViewer *viewer,
                 else {
                         gr_convert_human_readable(&amount, &unit);
                 }
-
-                char *a_final = gr_number_format(amount);
-                const char *u_final = gr_unit_get_name(unit);
-                char *a2_final = gr_number_format(amount2);
-                const char *u2_final = gr_unit_get_name(unit2);
  
-                char *for_display = gr_convert_format_for_display(a_final, u_final, a2_final, u2_final);
+                char *for_display = gr_convert_format_for_display(amount, unit, amount2, unit2);
                 
                 row = g_object_new (GR_TYPE_INGREDIENTS_VIEWER_ROW,
                                     "unit", for_display,

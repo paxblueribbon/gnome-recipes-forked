@@ -491,7 +491,7 @@ gr_convert_multiple_units (double *amount1, GrUnit *unit1, double *amount2, GrUn
 }
 
 char *            
-gr_convert_format_for_display  (char *a1, const char *u1, char *a2, const char *u2) 
+gr_convert_format_for_display  (double a1, GrUnit u1, double a2, GrUnit u2) 
 {
                 g_autoptr(GString) s = NULL;
                 s = g_string_new ("");
