@@ -1,0 +1,29 @@
+diff a/src/gr-ingredients-viewer.c b/src/gr-ingredients-viewer.c	(rejected hunks)
+@@ -328,9 +328,10 @@ gr_ingredients_viewer_set_ingredients (GrIngredientsViewer *viewer,
+                 GrDimension dimension;
+                 GrPreferredUnit user_volume_unit = get_volume_unit();
+                 GrPreferredUnit user_weight_unit = get_weight_unit();
++                g_autofree char *for_display = NULL;
+ 
+                 double scale = viewer->scale;
+-                
++
+                 unit = gr_ingredients_list_get_unit(ingredients, ings[i]);
+ 
+                 amount = gr_ingredients_list_get_amount(ingredients, viewer->title, ings[i]) * scale;
+@@ -353,13 +354,8 @@ gr_ingredients_viewer_set_ingredients (GrIngredientsViewer *viewer,
+                         human_readable(&amount, &unit);
+                 }
+ 
+-                char *a_final = gr_number_format(amount);
+-                const char *u_final = gr_unit_get_name(unit);
+-                char *a2_final = gr_number_format(amount2);
+-                const char *u2_final = gr_unit_get_name(unit2);
+- 
+-                char *for_display = format_for_display(a_final, u_final, a2_final, u2_final);
+-                
++                for_display = format_for_display (amount, unit, amount2, unit2);
++
+                 row = g_object_new (GR_TYPE_INGREDIENTS_VIEWER_ROW,
+                                     "unit", for_display,
+                                     "ingredient", ings[i],
