@@ -214,10 +214,6 @@ ingredient_format_unit (Ingredient *ing)
         GrUnit u1, u2;
         double a1, a2;
         GrDimension dimension;
-        g_autofree char *a1_final = NULL;
-        g_autofree char *a2_final = NULL;
-        const char *u1_final = NULL;
-        const char *u2_final = NULL;
 
         for (i = 0; i < ing->units->len; i++) {
                 Unit *unit = &g_array_index (ing->units, Unit, i);
