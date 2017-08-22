@@ -39,7 +39,9 @@ search_provider = gnome.gdbus_codegen('gr-shell-search-provider-dbus',
                                       namespace: 'Gr')
 
 libsrc = [
+       'gr-convert-units.c',
        'gr-number.c',
+       'gr-settings.c',
        'gr-unit.c',
        'gr-utils.c'
 ]
@@ -58,7 +60,6 @@ src += ['main.c',
        'gr-chef.c',
        'gr-chef-dialog.c',
        'gr-chef-tile.c',
-       'gr-convert-units.c',
        'gr-cooking-page.c',
        'gr-cooking-view.c',
        'gr-cuisine.c',
@@ -98,7 +99,6 @@ src += ['main.c',
        'gr-recipes-page.c',
        'gr-search-page.c',
        'gr-season.c',
-       'gr-settings.c',
        'gr-shell-search-provider.c',
        'gr-shopping-list-formatter.c',
        'gr-shopping-list-printer.c',
