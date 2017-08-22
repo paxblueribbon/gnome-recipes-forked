@@ -124,7 +124,7 @@ gr_convert_temp (int *num, int *unit, int user_unit)
 }
 
 void 
-gr_convert_volume (double *amount, GrUnit *unit, int user_volume_unit)
+gr_convert_volume (double *amount, GrUnit *unit, GrPreferredUnit user_volume_unit)
 {
         double amount1 = *amount;
         GrUnit unit1 = *unit;        
@@ -144,6 +144,43 @@ gr_convert_volume (double *amount, GrUnit *unit, int user_volume_unit)
 
                         case GR_UNIT_LITER:
                                 amount1 = (amount1 * 202.884);
+                                unit1 = GR_UNIT_TEASPOON;
+                        break;
+
+                        //imperial to imperial
+
+                        case GR_UNIT_TEASPOON:
+                                amount1 = amount1;
+                                unit1 = GR_UNIT_TEASPOON;
+                        break;
+
+                        case GR_UNIT_TABLESPOON:           
+                                amount1 = (amount1 * 3);
+                                unit1 = GR_UNIT_TEASPOON;
+                        break;
+
+                        case GR_UNIT_CUP:
+                                amount1 = (amount1 * 48);
+                                unit1 = GR_UNIT_TEASPOON;
+                        break;  
+
+                        case GR_UNIT_PINT:
+                                amount1 = (amount1 * 96);
+                                unit1 = GR_UNIT_TEASPOON;
+                        break;
+
+                        case GR_UNIT_QUART:
+                                amount1 = (amount1 * 192);
+                                unit1 = GR_UNIT_TEASPOON;
+                        break;
+
+                        case GR_UNIT_GALLON:
+                                amount1 = (amount1 * 768);
+                                unit1 = GR_UNIT_TEASPOON;
+                        break;
+
+                        case GR_UNIT_FLUID_OUNCE:
+                                amount1 = (amount1 * 6);
                                 unit1 = GR_UNIT_TEASPOON;
                         break;
 
@@ -190,6 +227,23 @@ gr_convert_volume (double *amount, GrUnit *unit, int user_volume_unit)
                                 unit1 = GR_UNIT_MILLILITER;
                         break;
 
+                        //metric to metric
+
+                        case GR_UNIT_MILLILITER:
+                                amount1 = amount1;
+                                unit1 = GR_UNIT_MILLILITER;   
+                        break;
+
+                        case GR_UNIT_DECILITER:
+                                amount1 = (amount1 * 100);
+                                unit1 = GR_UNIT_MILLILITER;
+                        break;
+
+                        case GR_UNIT_LITER:
+                                amount1 = (amount1 * 1000);
+                                unit1 = GR_UNIT_MILLILITER;
+                        break;
+
                         default:
                         ;        
                 }
@@ -199,7 +253,7 @@ gr_convert_volume (double *amount, GrUnit *unit, int user_volume_unit)
 }
 
 void 
-gr_convert_weight (double *amount, GrUnit *unit, int user_weight_unit)
+gr_convert_weight (double *amount, GrUnit *unit, GrPreferredUnit user_weight_unit)
 {
         double amount1 = *amount;        
         GrUnit unit1 = *unit;
@@ -215,6 +269,24 @@ gr_convert_weight (double *amount, GrUnit *unit, int user_weight_unit)
                                 amount1 = (amount1 * 35.274);
                                 unit1 = GR_UNIT_OUNCE;
                         break;
+
+                        // imperial to imperial
+
+                        case GR_UNIT_OUNCE:
+                                amount1 = amount1;
+                                unit1 = GR_UNIT_OUNCE;                                
+                        break;
+
+                        case GR_UNIT_POUND:
+                                amount1 = (amount1 * 16);
+                                unit1 = GR_UNIT_OUNCE;
+                        break;
+
+                        case GR_UNIT_STONE:
+                                amount1 = (amount1 * 224);
+                                unit1 = GR_UNIT_OUNCE;
+                        break;
+
 
                         default:
                         ;        
@@ -235,6 +307,18 @@ gr_convert_weight (double *amount, GrUnit *unit, int user_weight_unit)
 
                         case GR_UNIT_STONE:
                                 amount1 = (amount1 * 6350.29);
+                                unit1 = GR_UNIT_GRAM;
+                        break;
+
+                        //metric to metric
+
+                        case GR_UNIT_GRAM:
+                                amount1 = amount1;
+                                unit1 = GR_UNIT_GRAM;
+                        break;
+
+                        case GR_UNIT_KILOGRAM:
+                                amount1 = (amount1 * 1000);
                                 unit1 = GR_UNIT_GRAM;
                         break;
 

@@ -209,50 +209,69 @@ ingredient_format_unit (Ingredient *ing)
 {
         g_autoptr(GString) s = NULL;
         int i;
-        static char *for_display;
         GrPreferredUnit user_volume_unit = gr_convert_get_volume_unit();
         GrPreferredUnit user_weight_unit = gr_convert_get_weight_unit();
-
-        s = g_string_new ("");
+        GrUnit u1, u2;
+        double a1, a2;
+        GrDimension dimension;
+        g_autofree char *a1_final = NULL;
+        g_autofree char *a2_final = NULL;
+        const char *u1_final = NULL;
+        const char *u2_final = NULL;
 
         for (i = 0; i < ing->units->len; i++) {
-                Unit *u = &g_array_index (ing->units, Unit, i);
-                g_autofree char *num = NULL;
-                if (s->len > 0)
-                        g_string_append (s, ", ");
-                double a1 = u->amount;
-                GrUnit u1 = u->unit;
-                double a2 = 0;
-                GrUnit u2 = GR_UNIT_UNKNOWN;
-               
-                GrDimension dimension = gr_unit_get_dimension(u1);
-                if (dimension) {
-                
-                if (dimension == GR_DIMENSION_VOLUME) {
-                        gr_convert_volume(&a1, &u1, user_volume_unit); 
-                        }
+                Unit *unit = &g_array_index (ing->units, Unit, i);
+                double a = unit->amount;
+                GrUnit u = unit->unit;
 
-                if (dimension == GR_DIMENSION_MASS) {
-                        gr_convert_weight(&a1, &u1, user_weight_unit);
-                        }
-               }
-                
-                if ((dimension == GR_DIMENSION_VOLUME && user_volume_unit == GR_PREFERRED_UNIT_IMPERIAL) || (dimension == GR_DIMENSION_MASS && user_weight_unit == GR_PREFERRED_UNIT_IMPERIAL)) {
-                        gr_convert_multiple_units(&a1, &u1, &a2, &u2);  
+                dimension = gr_unit_get_dimension (u);
+
+                if (!dimension) {
+                        g_error ("No dimension...how...");
+                }
+                else if (dimension == GR_DIMENSION_VOLUME) {
+                        gr_convert_volume (&a, &u, user_volume_unit);
+                }
+                else if (dimension == GR_DIMENSION_MASS) {
+                        gr_convert_weight (&a, &u, user_weight_unit);
+                }
+
+                if (i == 0) {
+                        u1 = u;
+                        a1 = a;
+                }
+                else if (u == u1) {
+                        a1 += a;
                 }
                 else {
-                        gr_convert_human_readable(&a1, &u1);
+                        g_error ("conversion yielded different units...why...");
                 }
-                char *a_final = gr_number_format(a1);
-                const char *u_final = gr_unit_get_name(u1);
-                char *a2_final = gr_number_format(a2);
-                const char *u2_final = gr_unit_get_name(u2);
- 
-                for_display = gr_convert_format_for_display(a_final, u_final, a2_final, u2_final);
         }
 
-        return for_display;
+        dimension = gr_unit_get_dimension (u1);
+
+        a2 = 0;
+        u2 = GR_UNIT_UNKNOWN;
+
+        if ((dimension == GR_DIMENSION_VOLUME && user_volume_unit == GR_PREFERRED_UNIT_IMPERIAL) ||
+            (dimension == GR_DIMENSION_MASS && user_weight_unit == GR_PREFERRED_UNIT_IMPERIAL)) {
+                gr_convert_multiple_units (&a1, &u1, &a2, &u2);
+        }
+        else {
+                gr_convert_human_readable (&a1, &u1);
+        }
+
+        a1_final = gr_number_format (a1);
+        u1_final = gr_unit_get_name (u1);
+
+        if (u2 != GR_UNIT_UNKNOWN) {
+                a2_final = gr_number_format (a2);
+                u2_final = gr_unit_get_name (u2);
+        }
+
+        return gr_convert_format_for_display (a1_final, u1_final, a2_final, u2_final);
 }
+
 
 static void
 add_removed_row (GrShoppingPage *page,
