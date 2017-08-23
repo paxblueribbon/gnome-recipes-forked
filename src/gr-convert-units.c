@@ -496,25 +496,34 @@ gr_convert_format_for_display  (double a1, GrUnit u1, double a2, GrUnit u2)
                 g_autoptr(GString) s = NULL;
                 s = g_string_new ("");
 
-                if (u1 == NULL) {
-                        g_string_append(s, a1);
+                if (u1 == GR_UNIT_UNKNOWN) {
+                        g_autofree char *num = NULL;
+                        num = gr_number_format (a1);
+                        g_string_append(s, num);
 
                 }
-                else if (u2 == NULL) {
-                        g_string_append(s, a1);
-                        g_string_append(s, " ");
-                        g_string_append(s, u1);
+                else if (u2 == GR_UNIT_UNKNOWN) {
+                        g_autofree char *num = NULL;
+                        num = gr_number_format (a1);
+                        g_string_append (s, num);
+                        g_string_append (s, " ");
+                        g_string_append (s, gr_unit_get_name (u1));
                 }
 
-                else {
-                        g_string_append(s, a1);
+                 else {
+                        g_autofree char *num1 = NULL;
+                        g_autofree char *num2 = NULL;
+
+                        num1 = gr_number_format (a1);
+                        num2 = gr_number_format (a2);
+                        g_string_append(s, num1);
                         g_string_append(s, " ");
-                        g_string_append(s, u1);
+                        g_string_append(s, gr_unit_get_name (u1));
                         g_string_append(s, ", ");
-                        g_string_append(s, a2);
+                        g_string_append(s, num2);
                         g_string_append(s, " ");
-                        g_string_append(s, u2);
-                }
+                        g_string_append(s, gr_unit_get_name (u2));
+                 }
     
     return g_strdup (s->str);
 }
