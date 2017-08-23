@@ -178,7 +178,7 @@ parse_as_fraction (double    *number,
                 denom = 1;
 
         *input = end;
-        *number = (double)num / (double)MAX(denom, 1);
+        *number = (double)num / (double)denom;
 
         return TRUE;
 }
@@ -319,6 +319,9 @@ format_fraction (int integral,
         append_digits (s, sub, denom);
 
 out:
+        if (s->len == 0)
+                g_string_append (s, "0");
+
         return g_string_free (s, FALSE);
 }
 
@@ -327,6 +330,14 @@ gr_number_format (double number)
 {
         double integral;
         int num, denom;
+        int sign;
+
+        if (number < 0) {
+                sign = -1;
+                number = - number;
+        }
+        else
+                sign = 1;
 
         integral = floor (number);
         number -= integral;
@@ -338,5 +349,5 @@ gr_number_format (double number)
                 num = denom = 0;
         }
 
-        return format_fraction ((int)integral, num, denom);
+        return format_fraction (sign * ((int)integral), num, denom);
 }
