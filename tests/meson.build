@@ -24,6 +24,12 @@ unit = executable('unit', 'unit.c',
                   dependencies: deps)
 test('unit', unit, env : env)
 
+convert = executable('convert', 'convert.c',
+                     include_directories : tests_inc,
+                     link_with: librecipes,
+                     dependencies: deps)
+test('convert', convert, env : env)
+
 ids = executable('ids', 'ids.c',
                   include_directories : tests_inc,
                   link_with: librecipes,
