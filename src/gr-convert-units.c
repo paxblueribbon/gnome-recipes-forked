@@ -490,11 +490,9 @@ gr_convert_multiple_units (double *amount1, GrUnit *unit1, double *amount2, GrUn
         *unit2 = u2;
 }
 
-char *            
-gr_convert_format_for_display  (double a1, GrUnit u1, double a2, GrUnit u2) 
+void
+gr_convert_format_for_display  (GString *s, double a1, GrUnit u1, double a2, GrUnit u2) 
 {
-                g_autoptr(GString) s = NULL;
-                s = g_string_new ("");
 
                 if (u1 == GR_UNIT_UNKNOWN) {
                         g_autofree char *num = NULL;
@@ -510,7 +508,7 @@ gr_convert_format_for_display  (double a1, GrUnit u1, double a2, GrUnit u2)
                         g_string_append (s, gr_unit_get_name (u1));
                 }
 
-                 else {
+                else {
                         g_autofree char *num1 = NULL;
                         g_autofree char *num2 = NULL;
 
@@ -524,6 +522,34 @@ gr_convert_format_for_display  (double a1, GrUnit u1, double a2, GrUnit u2)
                         g_string_append(s, " ");
                         g_string_append(s, gr_unit_get_name (u2));
                  }
-    
-    return g_strdup (s->str);
+}
+
+void
+gr_convert_format (GString *s, double amount, GrUnit unit)
+{
+        GrPreferredUnit user_volume_unit = gr_convert_get_volume_unit();
+        GrPreferredUnit user_weight_unit = gr_convert_get_weight_unit();
+        double amount2 = 0;
+        GrUnit unit2 = GR_UNIT_UNKNOWN;
+        
+        GrDimension dimension = gr_unit_get_dimension(unit);
+
+               if (dimension) {
+                if (dimension == GR_DIMENSION_VOLUME) {
+                        gr_convert_volume(&amount, &unit, user_volume_unit); 
+                        }
+
+                if (dimension == GR_DIMENSION_MASS) {
+                        gr_convert_weight(&amount, &unit, user_weight_unit);
+                        }
+               }
+                if ((dimension == GR_DIMENSION_VOLUME && user_volume_unit == GR_PREFERRED_UNIT_IMPERIAL) || (dimension == GR_DIMENSION_MASS && user_weight_unit == GR_PREFERRED_UNIT_IMPERIAL)) {
+                        gr_convert_multiple_units(&amount, &unit, &amount2, &unit2);  
+                }
+                else {
+                        gr_convert_human_readable(&amount, &unit);
+                }
+                
+                gr_convert_format_for_display (s, amount, unit, amount2, unit2);
+
 }
