@@ -321,39 +321,16 @@ gr_ingredients_viewer_set_ingredients (GrIngredientsViewer *viewer,
         for (i = 0; ings && ings[i]; i++) {
 
                 double amount;
-                double amount2 = 0;
                 GrUnit unit;
-                GrUnit unit2 = GR_UNIT_UNKNOWN;
                 GtkWidget *row;
-                GrDimension dimension;
-                GrPreferredUnit user_volume_unit = gr_convert_get_volume_unit();
-                GrPreferredUnit user_weight_unit = gr_convert_get_weight_unit();
 
                 double scale = viewer->scale;
                 
                 unit = gr_ingredients_list_get_unit(ingredients, ings[i]);
 
-                amount = gr_ingredients_list_get_amount(ingredients, viewer->title, ings[i]) * scale;
+                amount = gr_ingredients_list_get_amount(ingredients, ings[i]) * scale;
 
-                dimension = gr_unit_get_dimension(unit);
-
-               if (dimension) {
-                if (dimension == GR_DIMENSION_VOLUME) {
-                        gr_convert_volume(&amount, &unit, user_volume_unit); 
-                        }
-
-                if (dimension == GR_DIMENSION_MASS) {
-                        gr_convert_weight(&amount, &unit, user_weight_unit);
-                        }
-               }
-                if ((dimension == GR_DIMENSION_VOLUME && user_volume_unit == GR_PREFERRED_UNIT_IMPERIAL) || (dimension == GR_DIMENSION_MASS && user_weight_unit == GR_PREFERRED_UNIT_IMPERIAL)) {
-                        gr_convert_multiple_units(&amount, &unit, &amount2, &unit2);  
-                }
-                else {
-                        gr_convert_human_readable(&amount, &unit);
-                }
- 
-                char *for_display = gr_convert_format_for_display(amount, unit, amount2, unit2);
+                GString *for_display = gr_convert_format(amount, unit);
                 
                 row = g_object_new (GR_TYPE_INGREDIENTS_VIEWER_ROW,
                                     "unit", for_display,

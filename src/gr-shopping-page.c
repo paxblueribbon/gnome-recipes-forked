@@ -222,10 +222,8 @@ ingredient_format_unit (Ingredient *ing)
 
                 dimension = gr_unit_get_dimension (u);
 
-                if (!dimension) {
-                        g_error ("No dimension...how...");
-                }
-                else if (dimension == GR_DIMENSION_VOLUME) {
+
+                if (dimension == GR_DIMENSION_VOLUME) {
                         gr_convert_volume (&a, &u, user_volume_unit);
                 }
                 else if (dimension == GR_DIMENSION_MASS) {
@@ -493,7 +491,7 @@ collect_ingredients_from_recipe (GrShoppingPage *page,
                         GrUnit unit;
                         double amount;
 
-                        amount = gr_ingredients_list_get_amount (il, seg[i], ing[j]);
+                        amount = gr_ingredients_list_get_amount (il, ing[j]);
                         amount = amount * yield / gr_recipe_get_yield (recipe);
                         unit = gr_ingredients_list_get_unit (il, ing[j]);
                         add_ingredient (page, amount, unit, ing[j]);

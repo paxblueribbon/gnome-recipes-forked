@@ -32,6 +32,7 @@
 #include "gr-meal.h"
 #include "gr-season.h"
 #include "gr-utils.h"
+#include "gr-convert-units.h"
 
 
 struct _GrRecipePrinter
@@ -193,16 +194,20 @@ begin_print (GtkPrintOperation *operation,
         pango_layout_set_width (layout, width * PANGO_SCALE);
         pango_layout_set_font_description (layout, body_font);
 
-        for (j = 0; segs[j]; j++) {
-                ings = gr_ingredients_list_get_ingredients (ingredients, segs[j]);
-                for (i = 0; ings[i]; i++) {
-                        g_autofree char *unit = NULL;
+        for (i = 0; ings && ings[i]; i++) {
 
-                        unit = gr_ingredients_list_scale_unit (ingredients, segs[j], ings[i], 1.0);
-                        g_string_append (s, unit);
-                        g_string_append (s, " \n");
-                }
+                double amount;
+                GrUnit unit;
+
+                double scale = 1.0;
+                
+                unit = gr_ingredients_list_get_unit(ingredients, ings[i]);
+
+                amount = gr_ingredients_list_get_amount(ingredients, ings[i]) * scale;
+
+                s = gr_convert_format(amount, unit);
         }
+ 
         pango_layout_set_text (layout, s->str, s->len);
         pango_layout_get_size (layout, &amount_width, NULL);
         g_clear_object (&layout);
