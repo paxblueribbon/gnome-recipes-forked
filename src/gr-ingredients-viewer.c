@@ -323,6 +323,8 @@ gr_ingredients_viewer_set_ingredients (GrIngredientsViewer *viewer,
                 double amount;
                 GrUnit unit;
                 GtkWidget *row;
+                g_autoptr(GString) s = NULL;
+                s = g_string_new ("");
 
                 double scale = viewer->scale;
                 
@@ -330,10 +332,10 @@ gr_ingredients_viewer_set_ingredients (GrIngredientsViewer *viewer,
 
                 amount = gr_ingredients_list_get_amount(ingredients, ings[i]) * scale;
 
-                GString *for_display = gr_convert_format(amount, unit);
+                gr_convert_format(&s, amount, unit);
                 
                 row = g_object_new (GR_TYPE_INGREDIENTS_VIEWER_ROW,
-                                    "unit", for_display,
+                                    "unit", s,
                                     "ingredient", ings[i],
                                     "size-group", viewer->group,
                                     "editable", viewer->editable,

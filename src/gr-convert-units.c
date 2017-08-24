@@ -490,11 +490,11 @@ gr_convert_multiple_units (double *amount1, GrUnit *unit1, double *amount2, GrUn
         *unit2 = u2;
 }
 
-GString *            
+char **
 gr_convert_format_for_display  (double a1, GrUnit u1, double a2, GrUnit u2) 
 {
-                g_autoptr(GString) s = NULL;
-                s = g_string_new ("");
+        g_autoptr(GString) s = NULL;
+        s = g_string_new ("");
 
                 if (u1 == GR_UNIT_UNKNOWN) {
                         g_autofree char *num = NULL;
@@ -510,7 +510,7 @@ gr_convert_format_for_display  (double a1, GrUnit u1, double a2, GrUnit u2)
                         g_string_append (s, gr_unit_get_name (u1));
                 }
 
-                 else {
+                else {
                         g_autofree char *num1 = NULL;
                         g_autofree char *num2 = NULL;
 
@@ -524,12 +524,12 @@ gr_convert_format_for_display  (double a1, GrUnit u1, double a2, GrUnit u2)
                         g_string_append(s, " ");
                         g_string_append(s, gr_unit_get_name (u2));
                  }
-    
-    return g_strdup (s->str);
+
+        return g_strdup (s->str);;
 }
 
-GString *
-gr_convert_format (double amount, GrUnit unit)
+void
+gr_convert_format (GString *s, double amount, GrUnit unit)
 {
         GrPreferredUnit user_volume_unit = gr_convert_get_volume_unit();
         GrPreferredUnit user_weight_unit = gr_convert_get_weight_unit();
@@ -553,8 +553,8 @@ gr_convert_format (double amount, GrUnit unit)
                 else {
                         gr_convert_human_readable(&amount, &unit);
                 }
- 
-                GString *for_display = gr_convert_format_for_display(amount, unit, amount2, unit2);
+                
+                char **display = gr_convert_format_for_display(amount, unit, amount2, unit2);
 
-                return for_display;
+                g_string_append(s, *display);
 }

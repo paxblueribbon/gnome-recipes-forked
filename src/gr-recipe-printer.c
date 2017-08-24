@@ -205,7 +205,7 @@ begin_print (GtkPrintOperation *operation,
 
                 amount = gr_ingredients_list_get_amount(ingredients, ings[i]) * scale;
 
-                s = gr_convert_format(amount, unit);
+                gr_convert_format(&s, amount, unit);
         }
  
         pango_layout_set_text (layout, s->str, s->len);

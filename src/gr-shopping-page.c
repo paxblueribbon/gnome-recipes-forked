@@ -211,9 +211,10 @@ ingredient_format_unit (Ingredient *ing)
         int i;
         GrPreferredUnit user_volume_unit = gr_convert_get_volume_unit();
         GrPreferredUnit user_weight_unit = gr_convert_get_weight_unit();
-        GrUnit u1, u2;
-        double a1, a2;
+        GrUnit u1;
+        double a1;
         GrDimension dimension;
+        s = g_string_new ("");
 
         for (i = 0; i < ing->units->len; i++) {
                 Unit *unit = &g_array_index (ing->units, Unit, i);
@@ -221,7 +222,6 @@ ingredient_format_unit (Ingredient *ing)
                 GrUnit u = unit->unit;
 
                 dimension = gr_unit_get_dimension (u);
-
 
                 if (dimension == GR_DIMENSION_VOLUME) {
                         gr_convert_volume (&a, &u, user_volume_unit);
@@ -242,20 +242,9 @@ ingredient_format_unit (Ingredient *ing)
                 }
         }
 
-        dimension = gr_unit_get_dimension (u1);
+        gr_convert_format (&s, a1, u1);
 
-        a2 = 0;
-        u2 = GR_UNIT_UNKNOWN;
-
-        if ((dimension == GR_DIMENSION_VOLUME && user_volume_unit == GR_PREFERRED_UNIT_IMPERIAL) ||
-            (dimension == GR_DIMENSION_MASS && user_weight_unit == GR_PREFERRED_UNIT_IMPERIAL)) {
-                gr_convert_multiple_units (&a1, &u1, &a2, &u2);
-        }
-        else {
-                gr_convert_human_readable (&a1, &u1);
-        }
-
-        return gr_convert_format_for_display (a1, u1, a2, u2);
+        return g_strdup (s->str);
 }
 
 
