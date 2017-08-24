@@ -63,12 +63,12 @@ test_line (const char *line)
                 a = amount;
                 u = unit;
                 gr_convert_volume (&a, &u, GR_PREFERRED_UNIT_METRIC);
-                g_string_append_printf (string, "METRIC %g %s\n", a, gr_unit_get_name (u));
+                g_string_append_printf (string, "METRIC %g %s\n", a, gr_unit_get_display_name (u));
 
                 a = amount;
                 u = unit;
                 gr_convert_volume (&a, &u, GR_PREFERRED_UNIT_IMPERIAL);
-                g_string_append_printf (string, "IMPERIAL %g %s\n", a, gr_unit_get_name (u));
+                g_string_append_printf (string, "IMPERIAL %g %s\n", a, gr_unit_get_display_name (u));
         }
         else if (dimension == GR_DIMENSION_MASS) {
                 double a;
@@ -77,12 +77,12 @@ test_line (const char *line)
                 a = amount;
                 u = unit;
                 gr_convert_weight (&a, &u, GR_PREFERRED_UNIT_METRIC);
-                g_string_append_printf (string, "METRIC %g %s\n", a, gr_unit_get_name (u));
+                g_string_append_printf (string, "METRIC %g %s\n", a, gr_unit_get_display_name (u));
 
                 a = amount;
                 u = unit;
                 gr_convert_weight (&a, &u, GR_PREFERRED_UNIT_IMPERIAL);
-                g_string_append_printf (string, "IMPERIAL %g %s\n", a, gr_unit_get_name (u));
+                g_string_append_printf (string, "IMPERIAL %g %s\n", a, gr_unit_get_display_name (u));
         }
 
         g_string_append (string, "\n");
